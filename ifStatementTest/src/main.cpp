@@ -15,7 +15,7 @@ void setup() {
   pinMode(BTNPIN, INPUT);
   pinMode(LEDPIN, OUTPUT);
 
-  analogWrite(LEDPIN, ledState)
+  analogWrite(LEDPIN, ledState);
 }
 
 void loop() {
