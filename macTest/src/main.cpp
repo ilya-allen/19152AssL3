@@ -6,7 +6,7 @@
 #include <WiFi.h>
 
 // Variables for network and default wifi status
-const char SSID[] = "T8-Arduino";
+const char SSID[] = "T8-Arduino";  
 const char PASSWORD[] = "T8-Arduino";
 
 
@@ -87,4 +87,8 @@ void setup() {
     
   }
 
+}
+
+void loop() {
+  // Blank
 }
