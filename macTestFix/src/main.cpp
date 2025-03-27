@@ -1,5 +1,5 @@
 
-
+#include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_ST7789.h>
 #include <SPI.h>
@@ -49,10 +49,12 @@ void setup() {
   while(WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.print(".");
+    tftScreen.fillScreen(ST77XX_BLUE);
      
   } 
   
-  if(WL_CONNECTED == true) {
+  if(WiFi.status() == WL_CONNECTED) {
+    tftScreen.fillScreen(ST77XX_WHITE);
     WiFi.macAddress(mac);
     Serial.println("Default MAC address");
     // HEX
