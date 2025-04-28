@@ -78,13 +78,13 @@ button {
 Navigation bar styles
 ---------------------*/
 
-/* what does this do? */
+/* Stops the scrollbar */
 .topnav {
     overflow: hidden;
     background-color: #0A1128;
 }
 
-/* what does this do? */
+/* push the navigation to the left and align all text to the center */
 .topnav a {
     float: left;
     display: block;
@@ -95,18 +95,18 @@ Navigation bar styles
     font-size: 1.2rem;
 }
 
-/* what does this do? */
+/* when the mouse is over the navigation change background */
 .topnav a:hover {
     background-color: #186775;
     color: white;
 }
 
-/* what does this do? */
+/* doesn't change the mouse */
 .disabled {
     pointer-events: none;
 }
 
-/* what does this do? */
+/* defaults display to none */
 .topnav .icon {
     display: none;
 }
