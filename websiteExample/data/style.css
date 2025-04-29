@@ -111,27 +111,27 @@ Navigation bar styles
     display: none;
 }
 
-/* what does this do? */
+/* The two different page buttons are forced to the right of the top bar navigation menu. They are locked to the right with float right */
 .topnav-right {
     float: right;
 }
 
-/* what does this do? */
+/* When the screen is adjusted to a narrow view point below 600 pixels, certain elements are adjusted so that they can fit better into the viewpoint.  */
 @media screen and (max-width: 600px) {
 
-    /* what does this do? */
+    /* the entire top-navigation is now positioning itself relative to its parent element. This means its responsive to how the page moves */
     .topnav.responsive {
         position: relative;
     }
 
-    /* what does this do? */
+    /* it sticks the icon into the top right corner of the page. It doesn't move */
     .topnav.responsive .icon {
         position: absolute;
         right: 0;
         top: 0;
     }
 
-    /* what does this do? */
+    /* Displays the navigation buttons as blocks instead of side-by-side elements. When they are blocks they take up each line so that they stack upon eachother */
     .topnav.responsive a,
     .topnav.responsive .topnav-right {
         float: none;
