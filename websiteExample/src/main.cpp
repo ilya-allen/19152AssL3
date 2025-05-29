@@ -3,6 +3,9 @@
 #include <AsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
+#include <Arduino_JSON.h>
+#include <Adafruit_BMP280.h>
+#include <Adafruit_Sensor.h>
 
 // Variables for network and default wifi status
 const char SSID[] = "T8-Arduino";  
