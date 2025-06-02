@@ -11,6 +11,13 @@
 const char SSID[] = "T8-Arduino";  
 const char PASSWORD[] = "T8-Arduino";
 
+AsyncEventSource events("/events");
+JSONVar readings;
+
+unsigned long lastTime = 0;
+unsigned long timerDelay = 30000;
+Adafruit_BMP280 bmp;
+
 // Create an async web server
 AsyncWebServer server(80);
 
@@ -43,6 +50,22 @@ void initWifi() {
 
 }
 
+void initBMP() {
+  if(!bmp.begin(0x76)) {
+    Serial.println("Couldn't find the BMP80 Sensor, Check Wiring!");
+    while(1)
+      ;
+  }
+}
+
+String getSensorReadings() {
+  // 100.0F means taking the pressure reading and divide into a floating point so you don't have 25.5 become 25
+  readings["pressure"] = String(bmp.readPressure()/100.0F);
+
+  String jsonString = JSON.stringify(readings);
+  return jsonString;
+}
+
 String processor(const String &VAR) {
   if(VAR == "STATE") {
     if(digitalRead(LEDPIN)) {
@@ -62,6 +85,7 @@ void setup() {
   }
   initWifi();
   initLittleFS();
+  initBMP();
   pinMode(LEDPIN, OUTPUT);
 
   // Server.on defines a route handler. It awaits a request and tells your server what to do when a specific url is received
@@ -83,9 +107,31 @@ void setup() {
     request->send(LittleFS, "/index.html", "text/html", false, processor);
   });
 
+  //Request for last sensor readings
+  server.on("/readings", HTTP_GET, [](AsyncWebServerRequest *request){
+    String json = getSensorReadings();
+    request->send(200, "application/json", json);
+    json = String();
+  }); 
+  events.onConnect([](AsyncEventSourceClient * client) {
+    if(client->lastId()) {
+      Serial.printf("Client Reconnected! Last message ID that it got is: %u\n", client->lastId());
+    }
+    //send event with message hello id current millis
+    client->send("Hello!", NULL, millis(), 10000);
+  });
+  server.addHandler(&events);
+
   //turn on the server
   server.begin();
 
 }
 
-void loop() {}
+void loop() {
+  if((millis() - lastTime) > timerDelay) {
+    // Send events to the client with the sensor readings every 30 seconds
+    events.send("ping", NULL, millis());
+    events.send(getSensorReadings().c_str(), "new_reading", millis());
+    lastTime = millis();
+  }
+}
