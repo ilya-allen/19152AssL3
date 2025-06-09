@@ -7,6 +7,8 @@
 #include <Adafruit_BMP280.h>
 #include <Adafruit_Sensor.h>
 
+#include "arduino_secrets.h"
+
 // Variables for network and default wifi status
 const char SSID[] = "T8-Arduino";  
 const char PASSWORD[] = "T8-Arduino";
@@ -22,6 +24,7 @@ Adafruit_BMP280 bmp;
 AsyncWebServer server(80);
 
 const byte LEDPIN = LED_BUILTIN;
+const byte SENSORPIN = A5;
 
 String ledState;
 
@@ -51,7 +54,7 @@ void initWifi() {
 }
 
 void initBMP() {
-  if(!bmp.begin(0x76)) {
+  if(!bmp.begin()) {
     Serial.println("Couldn't find the BMP80 Sensor, Check Wiring!");
     while(1)
       ;
@@ -84,9 +87,10 @@ void setup() {
     delay(100);
   }
   initWifi();
-  initLittleFS();
+ // initLittleFS();
   initBMP();
   pinMode(LEDPIN, OUTPUT);
+  pinMode(SENSORPIN, INPUT);
 
   // Server.on defines a route handler. It awaits a request and tells your server what to do when a specific url is received
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -128,6 +132,78 @@ void setup() {
 }
 
 void loop() {
+  WiFiClient client = server.available();
+  if (client) {
+    Serial.println("new client");
+    // Variable to hold any incoming data from the browser/client
+    String currentLine = "";
+
+    // while they are connected
+    while(client.connected()) {
+      if(client.available()) {
+        // another var to hold any incoming
+        char c = client.read();
+        Serial.write(c);
+
+        /////
+        // if browser sent a newline character
+        if(c == '\n') {
+
+          // If the current line is blank
+          // end of line
+          if(currentLine.length() == 0) {
+            // http code for a webpage after some initial
+            client.println("HTTP/1.1 200 OK");  
+            client.println("Content-Type: text/html");
+            client.println("Connection: close"); // the connection will be closed after completion of the response
+            client.println("Refresh: 5");        // refresh the page automatically every 5 sec
+            client.println();
+            client.println("<!DOCTYPE HTML>");
+            client.println("<html>");
+            client.println("<style>html{font-family: Arial;}</style>");
+            client.println("<h1>Sensor stuff</h1>");
+
+            // output the value of an analog input pin
+            int sensorReading = analogRead(SENSORPIN);
+            client.print("RAW Sensor value is ");
+            client.print(sensorReading);
+
+            //Output different text depending on LED colour
+            byte LEDReading = digitalRead(LEDPIN);
+            if(LEDReading == HIGH) {
+              client.print("Red LED is on <br><br>");
+            } else {
+              client.print("Red LED is off <br><br>"); 
+            }
+
+            // When clicking either an H or L
+
+            client.print("Click <a href=\"/H\">here</a> turn the LED on<br>");
+            client.print("Click <a href=\"/H\">here</a> turn the LED off<br>");
+
+            client.println("</html>");
+            break;
+          } else {
+            // Clear variable if first new line
+            currentLine = "";
+          }
+        } else if(c != '\r') {
+          currentLine += c; // add to end of currentline
+        }
+
+        // Check for H or L at the end of the address bar
+        if(currentLine.endsWith("GET /H")) {
+          digitalWrite(LEDPIN, HIGH); // GET /H turns led on
+        }
+        if(currentLine.endsWith("GET /L")) {
+          digitalWrite(LEDPIN, LOW); // GET /L turns led off
+        }
+      } // End of client.available()
+    } // End of while loop
+    // close connection with esp32 and as client is not connected
+    client.stop();
+    Serial.println("client disconnected");
+  }
   if((millis() - lastTime) > timerDelay) {
     // Send events to the client with the sensor readings every 30 seconds
     events.send("ping", NULL, millis());
