@@ -82,7 +82,7 @@ void loop() {
             client.println();
             client.println(OPENINGHTML);
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////Needs Checking from Below////////////////////////////////////////////////
+            ///////////////////////////////////Needs Checking from Below////////////////////////////////////////////////7
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // output the value of an analog input pin
             int sensorReading = analogRead(SENSORPIN);
@@ -90,11 +90,11 @@ void loop() {
             client.print(sensorReading);
 
             //Output different text depending on LED colour
-            byte LEDReading = digitalRead(LEDPIN);
-            if(LEDReading == HIGH) {
-              client.print("Red LED is on <br><br>");
+            byte BUZZReading = digitalRead(BUZZERPIN);
+            if(BUZZReading == HIGH) {
+              client.print("Buzzer is on <br><br>");
             } else {
-              client.print("Red LED is off <br><br>"); 
+              client.print("Buzzer is off <br><br>"); 
             }
 
             // When clicking either an H or L
@@ -114,10 +114,10 @@ void loop() {
 
         // Check for H or L at the end of the address bar
         if(currentLine.endsWith("GET /H")) {
-          digitalWrite(LEDPIN, HIGH); // GET /H turns led on
+          digitalWrite(BUZZERPIN, 1000); // Turn Buzzer on with a 1000HZ signal
         }
         if(currentLine.endsWith("GET /L")) {
-          digitalWrite(LEDPIN, LOW); // GET /L turns led off
+          digitalWrite(BUZZERPIN); // GET /L turns led off
         }
       } // End of client.available()
     } // End of while loop
@@ -125,9 +125,9 @@ void loop() {
     client.stop();
     Serial.println("client disconnected");
   }
-  }
-
   // Obtain ICM's AGMT readings
   myICM.getAGMT();
 
 }
+
+
