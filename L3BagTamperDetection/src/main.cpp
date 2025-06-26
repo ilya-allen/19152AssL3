@@ -114,10 +114,10 @@ void loop() {
 
         // Check for H or L at the end of the address bar
         if(currentLine.endsWith("GET /H")) {
-          digitalWrite(BUZZERPIN, 1000); // Turn Buzzer on with a 1000HZ signal
+          tone(BUZZERPIN, 1000); // Turn Buzzer on with a 1000HZ signal
         }
         if(currentLine.endsWith("GET /L")) {
-          digitalWrite(BUZZERPIN); // GET /L turns led off
+          noTone(BUZZERPIN); // GET /L turns led off
         }
       } // End of client.available()
     } // End of while loop
