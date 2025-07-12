@@ -5,36 +5,47 @@
 const byte HEATBULB = 3;
 const byte TEMPSENSOR = A0; 
 const byte PRESSENSOR = A1;
-const byte DEFAULTTEMP = 35;
 
 // Changing Variables, all number based
 unsigned long lastCallbackTime = 0;
-int chosenDelay = 5 * 60;
-byte chosenTemp = DEFAULTTEMP;
+int chosenDelay = -1;
+int chosenTemp = -1;
 
 
 // Function that calls upon user preferences, when the user
 // starts up the program, the user will be asked for their
 // preffered tempereature and delay between checks to save power.
-void userPref(byte &chosenTemp) {
+void userPref(int &chosenTemp) {
   // Prints questions into the serial for the user to read.
-  Serial.print("Default Temp: ");
-  Serial.println(chosenTemp);
   Serial.println("Choose Your Preffered Temperature: ");
-  // Wait for user input before continuing with next tasks
-  while(Serial.available() == 0) {
-     
+  while(chosenTemp < 0 || chosenTemp > 60) {
+  	while(Serial.available() == 0) {
+      
+  	}
+    chosenTemp = Serial.parseFloat();
+    // Wait for correct user input before continuing with next tasks
+    if(chosenTemp < 0) {
+      Serial.println("You have inputed an invalid temperature range. Please stay above 0 degrees and below 60 degrees");
+    }
+    
   }
-  chosenTemp = Serial.parseInt(); // Read user input
+   // Read user input
   Serial.print("Your Chosen Temp: ");
   Serial.println(chosenTemp);
   
   // Same as aboved but with changed text and variable names
   Serial.println("Now Choose Your Preffered delay between temperature checks in minutes (shorter time between checks can result in more power usage): ");
-  while(Serial.available() == 0) {
-     
+  while(chosenDelay < 0 || chosenDelay >  15 * 60) {
+  	while(Serial.available() == 0) {
+      
+  	}
+    chosenDelay = Serial.parseFloat() * 60;
+    // Wait for correct user input before continuing with next tasks
+    if(chosenDelay < 0) {
+      Serial.println("You have inputed an invalid delay in mintes. Please stay above 0 minutes and below 15 mintues");
+    }
+    
   }
-  chosenDelay = Serial.parseFloat() * 60;
   Serial.print("Your Chosen Delay: ");
   Serial.print(chosenDelay / 60);
   Serial.println(" Minutes");
