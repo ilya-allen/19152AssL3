@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- The head contains neccesarry links to the css page. Aswell as the title seen on the tab. The viewport is adjusted aswell-->
+    <title>Homepage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <!-- Div is a container which holds all the elements. The a tag creates a clickable link. The smaller div contains the headers for the button. The slider bar is also in the second div. -->
+    <div class="topnav" id="myTopnav">
+        <a href="#" class="disabled">Homepage</a>
+        <div class="topnav-right">
+            <a href="inputs.html">Inputs</a>
+            <a href="outputs.html">Outputs</a>
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="handleNavBar()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+    <!-- Content container containing the text and writeup. Headers and P stand for the different sizes of text. A deeper div contains the on and off buttons-->
+    <div class="content">
+        <h1>Welcome to my web server</h1>
+        <p>Here is some <bold>simple</bold> input output for the red LED.
+            But look on the Inputs and Outputs pages for more detailed stuff.
+        </p>
+        <div class="card-grid">
+            <div class="card">
+                <p class="card-title">Built-in LED</p>
+                <p>
+                    <a href="on"><button class="button-on">ON</button></a>
+                    <a href="off"><button class="button-off">OFF</button></a>
+                </p>
+                <p class="state">The led is: %STATE%</p>
+            </div>
+        </div>
+        <div class="card">
+            <p class="card-title">Pressure</p>
+            <p class="reading"><span id="pres"></span> hpa</p>
+        </div>
+    </div>
+    <!-- Script Tag to link the script file -->
+    <script src="script.js"></script>
+</body>
+
+</html>
