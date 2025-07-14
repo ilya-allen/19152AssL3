@@ -20,6 +20,7 @@ const byte SENSORPIN = A5;
 const char SSID[] = "T8-Arduino";  
 const char PASSWORD[] = "T8-Arduino";
 
+//HAN Notes - What is this object used for?
 WiFiServer server(80);
 
 //set the time
@@ -28,6 +29,9 @@ unsigned long timeTriggered;
 //Declare ICM
 ICM_20948_I2C myICM;
 
+/**
+  * HAN Notes - give a brief overview of this method
+  */
 void initWifi() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(SSID, PASSWORD);
@@ -43,15 +47,21 @@ void initWifi() {
 
 }
 
+/**
+  * HAN Notes - give a brief overview of this method
+  */
 void setup() {
   initWifi();
 
   pinMode(BUZZERPIN, OUTPUT);
   pinMode(SENSORPIN, INPUT);
-
+//HAN Notes - what does this code do?
   server.begin();
 }
 
+/**
+  * HAN Notes - give a brief overview of this method
+  */
 void loop() {
 
   //check if anyones connects to the ESP32
@@ -85,6 +95,7 @@ void loop() {
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ///////////////////////////////////Needs Checking from Below////////////////////////////////////////////////7
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //HAN Notes - I would move the getAGMT code here and if it detects movement update some readings
             // output the value of an analog input pin
             int sensorReading = analogRead(SENSORPIN);
             client.print("RAW Sensor value is ");
@@ -99,7 +110,7 @@ void loop() {
             }
 
             // When clicking either an H or L
-
+//HAN Notes - what do we want to turn on or off, think about all the controls you may want for this project
             client.print("Click <a href=\"/H\">here</a> turn the LED on<br>");
             client.print("Click <a href=\"/H\">here</a> turn the LED off<br>");
 
@@ -112,7 +123,7 @@ void loop() {
         } else if(c != '\r') {
           currentLine += c; // add to end of currentline
         }
-
+//HAN Notes - do you think H and L are good references for buzzer on and off? or could you give more descriptive messages
         // Check for H or L at the end of the address bar
         if(currentLine.endsWith("GET /H")) {
           tone(BUZZERPIN, 1000); // Turn Buzzer on with a 1000HZ signal
