@@ -5,8 +5,30 @@
     scroll-behavior: smooth;
 }
 
+h1 {
+    color: aliceblue;
+}
+
 header {
-    background-color: rgba(127, 108, 236, 0.364);
+    background-color: rgb(169, 158, 234);
     height: 65px;
     width: 100%;
+}
+
+.header_logo {
+    margin-top: 5px;
+    float: left;
+    width: 60px;
+    height: 55px;
+}
+
+.header_title {
+    margin-left: 15px;
+    margin-top: 12px;
+    float: left;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+body {
+    background-color: rgb(146, 127, 254);
 }
