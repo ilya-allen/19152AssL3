@@ -7,6 +7,7 @@
 
 h1 {
     color: aliceblue;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 header {
@@ -20,6 +21,7 @@ header {
     float: left;
     width: 60px;
     height: 55px;
+    display: block;
 }
 
 .header_title {
@@ -31,4 +33,37 @@ header {
 
 body {
     background-color: rgb(146, 127, 254);
+}
+
+.center {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.info {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin-top: 50px;
+    width: 500px;
+    height: 275px;
+    border-radius: 5px;
+    background-color: rgb(169, 158, 234);
+    box-shadow: 5px 5px 5px rgba(128, 128, 128, 0.779);
+}
+
+.info_text {
+    text-align: center;
+}
+
+.header_status {
+    float: right;
+    margin-top: 15px;   
+    margin-right: 50px;
+}
+
+.on_off {
+    float: right;
+    margin-top: 15px;   
+    margin-right: 50px;
+    color: red;
 }
