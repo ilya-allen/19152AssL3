@@ -67,3 +67,20 @@ body {
     margin-right: 50px;
     color: red;
 }
+
+.button_row {
+    margin-top: 25px;
+    width: 500px;
+    display: flex;
+}
+
+.display_choice {
+    margin-right: 25px;
+    background-color: rgb(169, 158, 234);
+    color: aliceblue;
+    font-size: 20px;
+    border: none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    padding: 20px 35px 20px 35px;
+
+}
