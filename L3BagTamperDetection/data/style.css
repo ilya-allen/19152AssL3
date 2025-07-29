@@ -49,6 +49,8 @@ body {
     border-radius: 5px;
     background-color: rgb(169, 158, 234);
     box-shadow: 5px 5px 5px rgba(128, 128, 128, 0.779);
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .info_text {
@@ -82,5 +84,17 @@ body {
     border: none;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     padding: 20px 35px 20px 35px;
+    cursor: pointer;
 
+}
+
+.pre_info {
+    margin-top: 10px;
+}
+
+.sensor_val {
+    margin-top: 40px;
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 60px;
 }
