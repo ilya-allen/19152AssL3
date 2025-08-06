@@ -24,12 +24,14 @@ void userPref(int &chosenTemp) {
   	}
     chosenTemp = Serial.parseFloat();
     // Wait for correct user input before continuing with next tasks
-    if(chosenTemp < 0) {
+    if(chosenTemp < 0 || chosenTemp > 60) {
       Serial.println("You have inputed an invalid temperature range. Please stay above 0 degrees and below 60 degrees");
+    } else if (chosenTemp > 0 && chosenTemp < 3) {
+      Serial.println("You have inputed a boundary temperature. The program will work fine but there are possibilites of slight errors.");
     }
     
   }
-   // Read user input
+  // Read user input
   Serial.print("Your Chosen Temp: ");
   Serial.println(chosenTemp);
   
@@ -43,6 +45,8 @@ void userPref(int &chosenTemp) {
     // Wait for correct user input before continuing with next tasks
     if(chosenDelay < 0) {
       Serial.println("You have inputed an invalid delay in mintes. Please stay above 0 minutes and below 15 mintues");
+    } else if (chosenDelay > 0 && chosenDelay < 3 * 60) {
+      Serial.println("You have inputed a boundary delay. The program will work fine but there are possibilites of slight errors.");
     }
     
   }
