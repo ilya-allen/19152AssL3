@@ -5,7 +5,8 @@
 #include <Adafruit_BMP280.h>
 #include <Adafruit_Sensor.h>
 #include <ICM_20948.h>
-
+#include <Adafruit_ST7789.h>
+#include <Adafruit_AHTX0.h>
 
 
 //Includes the document storing HTML variables
@@ -23,11 +24,16 @@ const char PASSWORD[] = "T8-Arduino";
 //HAN Notes - What is this object used for?
 WiFiServer server(80);
 
+
 //set the time
 unsigned long timeTriggered;
 
-//Declare ICM
+//Declare ICM and Extra Libraries.
 ICM_20948_I2C myICM;
+Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
+Adafruit_AHTX0 aht;
+Adafruit_BMP280 bmp;
+
 
 /**
   * HAN Notes - give a brief overview of this method
@@ -53,9 +59,46 @@ void initWifi() {
 void setup() {
   initWifi();
 
+  Serial.begin(115200);
+  while (!Serial)
+  {
+    delay(100);
+  }
+
+  // turn on backlite
+  pinMode(TFT_BACKLITE, OUTPUT);
+  digitalWrite(TFT_BACKLITE, HIGH);
+
+  // turn on the TFT / I2C power supply
+  pinMode(TFT_I2C_POWER, OUTPUT);
+  digitalWrite(TFT_I2C_POWER, HIGH);
+  delay(10);
+
+  // initialize TFT
+  tft.init(135, 240); // Init ST7789 240x135
+  tft.setRotation(3);
+  tft.fillScreen(ST77XX_RED); //will blank any previous text on screen
   pinMode(BUZZERPIN, OUTPUT);
   pinMode(SENSORPIN, INPUT);
-//HAN Notes - what does this code do?
+
+  //initialize BMP280 and AHT sensors
+  if (!bmp.begin())
+  {
+    Serial.println("Could not find BMP280? Check wiring");
+    while (1)
+      ; // stop if sensor not found
+  }
+  Serial.println("BMP280 found");
+  bmp.setSampling(Adafruit_BMP280::MODE_FORCED); //take measurements only when requested
+
+  if (!aht.begin())
+  {
+    Serial.println("Could not find AHT? Check wiring");
+    while (1)
+      ; 
+  }
+  Serial.println("AHT10 or AHT20 found");
+  //HAN Notes - what does this code do?
   server.begin();
 }
 
@@ -110,7 +153,7 @@ void loop() {
             }
 
             // When clicking either an H or L
-//HAN Notes - what do we want to turn on or off, think about all the controls you may want for this project
+            //HAN Notes - what do we want to turn on or off, think about all the controls you may want for this project
             client.print("Click <a href=\"/H\">here</a> turn the LED on<br>");
             client.print("Click <a href=\"/H\">here</a> turn the LED off<br>");
 
