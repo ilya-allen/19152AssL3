@@ -84,25 +84,20 @@ void setup() {
   tft.init(135, 240); // Init ST7789 240x135
   tft.setRotation(3);
   tft.fillScreen(ST77XX_RED); //will blank any previous text on screen
-  pinMode(BUZZERPIN, OUTPUT);
-  pinMode(SENSORPIN, INPUT);
 
   //initialize BMP280 and AHT sensors
   if (!bmp.begin()) {
     Serial.println("Could not find BMP280? Check wiring");
-    while (1)
-      ; // stop if sensor not found
+    while (1); // stop if sensor not found
   } else {
     Serial.println("BMP280 found");
     bmp.setSampling(Adafruit_BMP280::MODE_FORCED); //take measurements only when requested
   }
 
 
-  if (!aht.begin())
-  {
+  if (!aht.begin()) {
     Serial.println("Could not find AHT? Check wiring");
-    while (1)
-      ; 
+    while (1); 
   }
   Serial.println("AHT10 or AHT20 found");
   //HAN Notes - what does this code do?
