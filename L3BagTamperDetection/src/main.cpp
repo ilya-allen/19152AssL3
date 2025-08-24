@@ -1,6 +1,7 @@
 // All Defined Libraries
 // Work done on tinkercad
 #include <SPI.h>
+#include <Wire.h>
 #include <WiFi.h>
 #include <Adafruit_BMP280.h>
 #include <Adafruit_Sensor.h>
@@ -27,6 +28,10 @@ WiFiServer server(80);
 
 //set the time
 unsigned long timeTriggered;
+
+// ---- Variables ----
+sensors_event_t humidity, tempAHT;
+float tempBMP, pressure, altitude;
 
 //Declare ICM and Extra Libraries.
 ICM_20948_I2C myICM;
@@ -57,9 +62,10 @@ void initWifi() {
   * HAN Notes - give a brief overview of this method
   */
 void setup() {
+  Serial.begin(115200);
   initWifi();
 
-  Serial.begin(115200);
+  
   while (!Serial)
   {
     delay(100);
@@ -82,14 +88,15 @@ void setup() {
   pinMode(SENSORPIN, INPUT);
 
   //initialize BMP280 and AHT sensors
-  if (!bmp.begin())
-  {
+  if (!bmp.begin()) {
     Serial.println("Could not find BMP280? Check wiring");
     while (1)
       ; // stop if sensor not found
+  } else {
+    Serial.println("BMP280 found");
+    bmp.setSampling(Adafruit_BMP280::MODE_FORCED); //take measurements only when requested
   }
-  Serial.println("BMP280 found");
-  bmp.setSampling(Adafruit_BMP280::MODE_FORCED); //take measurements only when requested
+
 
   if (!aht.begin())
   {
@@ -134,31 +141,35 @@ void loop() {
             client.println("Connection: close"); // the connection will be closed after completion of the response
             client.println("Refresh: 5");        // refresh the page automatically every 5 sec
             client.println();
-            client.println(OPENINGHTML);
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////Needs Checking from Below////////////////////////////////////////////////7
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //HAN Notes - I would move the getAGMT code here and if it detects movement update some readings
-            // output the value of an analog input pin
-            int sensorReading = analogRead(SENSORPIN);
-            client.print("RAW Sensor value is ");
-            client.print(sensorReading);
 
-            //Output different text depending on LED colour
-            byte BUZZReading = digitalRead(BUZZERPIN);
-            if(BUZZReading == HIGH) {
-              client.print("Buzzer is on <br><br>");
-            } else {
-              client.print("Buzzer is off <br><br>"); 
-            }
+            // Now printing basic to check values
+            client.println("<!DOCTYPE html><html><head><title>ESP32 Sensor Dashboard</title></head><body>");
+            client.println("<h1>ESP32 Sensor Dashboard</h1>");
 
-            // When clicking either an H or L
-            //HAN Notes - what do we want to turn on or off, think about all the controls you may want for this project
-            client.print("Click <a href=\"/H\">here</a> turn the LED on<br>");
-            client.print("Click <a href=\"/H\">here</a> turn the LED off<br>");
+            // AHT-Readings
+            sensors_event_t humidity, tempAHT;
+            aht.getEvent(&humidity, &tempAHT);
+            client.print("<p><b>AHT20 Temp:</b> ");
+            client.print(tempAHT.temperature, 1);
+            client.println(" °C</p>");
 
-            client.println("</html>");
-            break;
+            // --- BMP280 readings ---
+            float tempBMP   = bmp.readTemperature();
+            float pressure  = bmp.readPressure() / 100.0F;
+            float altitude  = bmp.readAltitude(1013.25);
+
+            client.print("<p><b>BMP280 Temp:</b> ");
+            client.print(tempBMP, 1);
+            client.println(" °C</p>");
+
+            client.print("<p><b>Pressure:</b> ");
+            client.print(pressure, 1);
+            client.println(" hPa</p>");
+
+
+            client.println("</body></html>");
+            break;  // break out after serving page
+            
           } else {
             // Clear variable if first new line
             currentLine = "";
@@ -166,22 +177,12 @@ void loop() {
         } else if(c != '\r') {
           currentLine += c; // add to end of currentline
         }
-//HAN Notes - do you think H and L are good references for buzzer on and off? or could you give more descriptive messages
-        // Check for H or L at the end of the address bar
-        if(currentLine.endsWith("GET /H")) {
-          tone(BUZZERPIN, 1000); // Turn Buzzer on with a 1000HZ signal
-        }
-        if(currentLine.endsWith("GET /L")) {
-          noTone(BUZZERPIN); // GET /L turns led off
-        }
       } // End of client.available()
     } // End of while loop
     // close connection with esp32 and as client is not connected
     client.stop();
     Serial.println("client disconnected");
   }
-  // Obtain ICM's AGMT readings
-  myICM.getAGMT();
 
 }
 
