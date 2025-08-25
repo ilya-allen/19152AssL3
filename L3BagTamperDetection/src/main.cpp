@@ -63,13 +63,13 @@ void initWifi() {
   */
 void setup() {
   Serial.begin(115200);
-  initWifi();
-
-  
   while (!Serial)
   {
     delay(100);
   }
+  initWifi();
+
+  
 
   // turn on backlite
   pinMode(TFT_BACKLITE, OUTPUT);
