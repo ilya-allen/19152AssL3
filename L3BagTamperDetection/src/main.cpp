@@ -139,7 +139,7 @@ void loop() {
 
             // Now printing basic to check values
             client.println("<!DOCTYPE html><html><head><title>ESP32 Sensor Dashboard</title></head><body>");
-            client.println("<h1>ESP32 Sensor Dashboard</h1>");
+            client.println("<h1 style='text-align: center; font-size: 15px;'>ESP32 Sensor Dashboard</h1>");
 
             // AHT-Readings
             sensors_event_t humidity, tempAHT;
