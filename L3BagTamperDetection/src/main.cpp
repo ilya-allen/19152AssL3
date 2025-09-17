@@ -134,7 +134,7 @@ void loop() {
 
             // The basic html ui code which displays websiute title and headings for the upcoming values
             client.println("<!DOCTYPE html><html><head><title>ESP32 Sensor Dashboard</title></head><body>");
-            client.println("<h1 style='text-align: center; font-size: 35  px;'>ESP32 Sensor Dashboard</h1>");
+            client.println("<h1 style='text-align: center; font-size: 35px;'>ESP32 Sensor Dashboard</h1>");
             client.println("<h2 style='text-align: center'>Below features the emperature and humidity</h2>");
 
             // AHT-Readings which will be displayed as HTML values
@@ -151,7 +151,7 @@ void loop() {
             // front end values of the BMP280 readings which will be displayed as HTML values
             client.print("<p style='text-align: center;><b>BMP280 Temp:</b> ");
             client.print(tempBMP, 1);
-            client.println(" °C</p>");
+            client.println("°C</p>");
 
             client.print("<pstyle='text-align: center;><b>Pressure:</b> ");
             client.print(pressure, 1);
