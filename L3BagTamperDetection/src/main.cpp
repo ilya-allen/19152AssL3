@@ -5,7 +5,7 @@
 #include <WiFi.h>
 #include <Adafruit_BMP280.h>
 #include <Adafruit_Sensor.h>
-#include <ICM_20948.h>
+//#include <ICM_20948.h>
 #include <Adafruit_ST7789.h>
 #include <Adafruit_AHTX0.h>
 
@@ -25,7 +25,7 @@ sensors_event_t humidity, tempAHT;
 float tempBMP, pressure, altitude;
 
 // Declare ICM and extra libraries .
-ICM_20948_I2C myICM;
+//ICM_20948_I2C myICM;
 Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
 Adafruit_AHTX0 aht;
 Adafruit_BMP280 bmp;
@@ -46,6 +46,17 @@ void initWifi() {
 
   Serial.print("Use this IP in your browser");
   Serial.println(WiFi.localIP());
+
+  // Clear & show connected message + IP on TFT
+  tft.fillScreen(ST77XX_BLACK);
+  tft.setCursor(10, 30);
+  tft.setTextColor(ST77XX_GREEN);
+  tft.print("WiFi Connected!");
+
+  tft.setCursor(10, 60);
+  tft.setTextColor(ST77XX_YELLOW);
+  tft.print("IP: ");
+  tft.println(WiFi.localIP());
 
 }
 
@@ -118,7 +129,7 @@ void loop() {
         char c = client.read();
         Serial.write(c);
 
-        /////
+        ///
         // if browser sent a newline character
         if(c == '\n') {
 
@@ -176,5 +187,3 @@ void loop() {
   }
 
 }
-
-
