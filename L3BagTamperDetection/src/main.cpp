@@ -24,6 +24,7 @@ WiFiServer server(80);
 sensors_event_t humidity, tempAHT;
 float tempBMP, pressure, altitude;
 
+//HAN Notes - tft aht and bmp should definitly change names to be custom to your brief
 // Declare ICM and extra libraries .
 //ICM_20948_I2C myICM;
 Adafruit_ST7789 tft = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
